@@ -1,21 +1,31 @@
 const key = `D4b4dAzj6RLOGGm46BucLTLpzz2Z9Kzi`;
 
-async function getData(key) {
-    try {
-        const response = await fetch(URL);
-        console.log(response);
-        if(response.status != 200) {
-            throw new Error(response.statusText)
-        }
-        //take respnse from server and convert it to JSON
-        const data = await response.json();
-        console.log(data)
-        document.querySelector('h1').textContent = data.content;
-        document.querySelector('h2').textContent = data.author;
-    }
-    catch (error) {
-        document.querySelector('h1').textContent = error;
-    }
+function search(key) {
+  const query = prompt("enter search");
+  const url = `http://dataservice.accuweather.com/locations/v1/search?apikey=${key}&q=${query}`;
+  console.log(url);
+  return url;
 }
 
-getData(URL)
+async function getData(URL) {
+//   try {
+    const response = await fetch(URL, /* {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    } */);
+    console.log(response);
+    if (response.status >= 200 || response.status <= 299) {
+      const data = await response.text();
+      console.log(data);
+      document.querySelector("p").textContent = data;
+    } else {
+      throw new Error(response.statusText);
+    }
+//   } catch (error) {
+//     document.querySelector("p").textContent = error;
+//   }
+}
+
+getData(key, search(key));
