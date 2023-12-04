@@ -21,3 +21,7 @@ html,
     margin: 0;
     padding: 0;
 }
+
+label, input {
+  font-size: 5rem;
+}

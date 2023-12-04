@@ -1,3 +1,6 @@
+import { domSelectors } from '../js/dom.js'
+
+const dom = domSelectors();
 const key = `D4b4dAzj6RLOGGm46BucLTLpzz2Z9Kzi`;
 
 function search(key) {
@@ -8,24 +11,23 @@ function search(key) {
 }
 
 async function getData(URL) {
-//   try {
-    const response = await fetch(URL, /* {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    } */);
+  try {
+    const response = await fetch(URL);
     console.log(response);
     if (response.status >= 200 || response.status <= 299) {
-      const data = await response.text();
+      const data = await response.json();
       console.log(data);
-      document.querySelector("p").textContent = data;
+      return data;
     } else {
-      throw new Error(response.statusText);
+      throw new Error(response);
     }
-//   } catch (error) {
-//     document.querySelector("p").textContent = error;
-//   }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-getData(key, search(key));
+dom.search.addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log(`value submitted: ${dom.searchInput.value}`)
+  getData(search())
+})
