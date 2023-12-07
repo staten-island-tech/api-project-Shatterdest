@@ -42,23 +42,20 @@ dom.search.addEventListener("submit", async (e) => {
   const locations = await getData(search(key, submitted, "search"));
   console.log(locations);
   locations.forEach((location) => {
-    dom.lContainer.insertAdjacentHTML(
-      "beforeend",
-      `<div class="location" value='${location.Key}'>
-    <h3 class='region-name'>${location.EnglishName}</h3>
+    const card = document.createElement("div");
+    card.classList.add("location");
+    card.innerHTML = `<h3 class='region-name'>${location.EnglishName}</h3>
     <h4>${location.Region.EnglishName}</h4>
     <h4>${location.Country.EnglishName}</h4>
-    <p>${location.Type}</p>
-  </div>`
-    );
-  });
-  dom.locations.forEach((location) => {
-    console.log(`adding event lisetner for ${location}`);
-    location.addEventListener("click", async (e) => {
+    <p>${location.Type}</p>`;
+    card.addEventListener("click", async (e) => {
       e.preventDefault();
-      const locationID = location.value;
+      console.log(`adding event lisetner for ${location}`);
+      const locationID = location.Key;
       const lData = await getData(search(key, locationID, "weather"));
       console.log(lData);
+      
     });
+    dom.lContainer.appendChild(card)
   });
 });
