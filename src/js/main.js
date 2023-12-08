@@ -35,27 +35,33 @@ async function getData(URL) {
   }
 }
 
+async function displayData(location){
+    const locationID = location.Key;
+    console.log("ID: " + locationID);
+    const lData = await getData(search(key, locationID, "weather"));
+    console.log(lData);
+    const card = document.createElement("div");
+    card.classList.add("location");
+    card.innerHTML = `<h3 class='region-name'>${location.EnglishName}</h3>
+    <h4>${location.Region.EnglishName}</h4>
+    <h4>${location.Country.EnglishName}</h4>
+    <p>${location.Type}</p>
+    <div class='expandable' id='${locationID}'>
+    <p>${JSON.stringify(lData)}</p>
+    </div>
+    `;
+    dom.lContainer.appendChild(card);
+}
+
 dom.search.addEventListener("submit", async (e) => {
   e.preventDefault();
   const submitted = dom.searchInput.value;
   console.log(`value submitted: ${submitted}`);
   const locations = await getData(search(key, submitted, "search"));
   console.log(locations);
-  locations.forEach((location) => {
-    const card = document.createElement("div");
-    card.classList.add("location");
-    card.innerHTML = `<h3 class='region-name'>${location.EnglishName}</h3>
-    <h4>${location.Region.EnglishName}</h4>
-    <h4>${location.Country.EnglishName}</h4>
-    <p>${location.Type}</p>`;
-    card.addEventListener("click", async (e) => {
-      e.preventDefault();
-      console.log(`adding event lisetner for ${location}`);
-      const locationID = location.Key;
-      const lData = await getData(search(key, locationID, "weather"));
-      console.log(lData);
-      
-    });
-    dom.lContainer.appendChild(card)
-  });
+
+  for (let i = 0; i <= locations.length; i++) {
+    const location = locations[i]
+    displayData(location)
+  }
 });
