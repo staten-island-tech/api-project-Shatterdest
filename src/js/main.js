@@ -36,20 +36,33 @@ async function getData(URL) {
 }
 
 async function displayData(location){
+  console.log(location)
     const locationID = location.Key;
-    console.log("ID: " + locationID);
     const lData = await getData(search(key, locationID, "weather"));
-    console.log(lData);
     const card = document.createElement("div");
+    const forecasts = lData.DailyForecasts
+    console.log("ID: " + locationID);
+    console.log(lData);
     card.classList.add("location");
     card.innerHTML = `<h3 class='region-name'>${location.EnglishName}</h3>
     <h4>${location.Region.EnglishName}</h4>
     <h4>${location.Country.EnglishName}</h4>
     <p>${location.Type}</p>
     <div class='expandable' id='${locationID}'>
-    <p>${JSON.stringify(lData)}</p>
+    <h3>${lData.Headline.Category}</h3>
+    <h3>${lData.Headline.Text}</h3>
     </div>
     `;
+    for (let i = 0; i <= forecasts.length; i++) {
+      console.log(forecasts)
+      const forecastCard = document.createElement('div')
+      const forecast = await forecasts[i]
+      forecastCard.classList.add('forecast')
+      forecastCard.innerHTML = `<h4>${forecast.Date}</h4>
+      <h3>Minimum: ${forecast.Temperature.Minimum.Value} °F</h3>
+      <h3>Maximum: ${forecast.Temperature.Maximum.Value} °F</h3>`
+      card.appendChild(forecastCard)
+    }
     dom.lContainer.appendChild(card);
 }
 
@@ -61,7 +74,9 @@ dom.search.addEventListener("submit", async (e) => {
   console.log(locations);
 
   for (let i = 0; i <= locations.length; i++) {
-    const location = locations[i]
+    const location = await locations[i]
     displayData(location)
   }
 });
+
+
