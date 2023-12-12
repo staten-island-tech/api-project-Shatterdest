@@ -40,34 +40,39 @@ async function displayData(location){
     const locationID = location.Key;
     const lData = await getData(search(key, locationID, "weather"));
     const card = document.createElement("div");
+    const forecastContainer = document.createElement('div')
     const forecasts = lData.DailyForecasts
     console.log("ID: " + locationID);
     console.log(lData);
     card.classList.add("location");
+    forecastContainer.classList.add('forecast-container')
+    forecastContainer.id = `${locationID}`
     card.innerHTML = `<h3 class='region-name'>${location.EnglishName}</h3>
     <h4>${location.Region.EnglishName}</h4>
     <h4>${location.Country.EnglishName}</h4>
     <p>${location.Type}</p>
-    <div class='expandable' id='${locationID}'>
-    <h3>${lData.Headline.Category}</h3>
-    <h3>${lData.Headline.Text}</h3>
-    </div>
+    <h2>${lData.Headline.Text}</h2>
     `;
+    dom.lContainer.appendChild(card);
+    card.appendChild(forecastContainer);
     for (let i = 0; i <= forecasts.length; i++) {
       console.log(forecasts)
       const forecastCard = document.createElement('div')
-      const forecast = await forecasts[i]
       forecastCard.classList.add('forecast')
-      forecastCard.innerHTML = `<h4>${forecast.Date}</h4>
-      <h3>Minimum: ${forecast.Temperature.Minimum.Value} °F</h3>
-      <h3>Maximum: ${forecast.Temperature.Maximum.Value} °F</h3>`
-      card.appendChild(forecastCard)
+      forecastCard.innerHTML = `<h4>${forecasts[i].Date}</h4>
+      <h3>Minimum: ${forecasts[i].Temperature.Minimum.Value} °F</h3>
+      <h3>Maximum: ${forecasts[i].Temperature.Maximum.Value} °F</h3>
+      <h2>Day: ${forecasts[i].Day.IconPhrase}</h2><img src="${forecasts[i].Day.Icon}.png" alt="">
+      <h2>Night: ${forecasts[i].Night.IconPhrase}</h2><img src="${forecasts[i].Night.Icon}.png" alt="">
+      ` 
+      console.log(forecastCard)
+      forecastContainer.appendChild(forecastCard)
     }
-    dom.lContainer.appendChild(card);
 }
 
 dom.search.addEventListener("submit", async (e) => {
   e.preventDefault();
+  dom.lContainer.innerHTML = ''
   const submitted = dom.searchInput.value;
   console.log(`value submitted: ${submitted}`);
   const locations = await getData(search(key, submitted, "search"));
