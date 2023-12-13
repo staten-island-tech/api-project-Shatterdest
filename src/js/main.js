@@ -7,11 +7,11 @@ dom.searchInput.value = null;
 
 function search(key, query, option) {
   if (option === "search") {
-    const url = `http://dataservice.accuweather.com/locations/v1/search?apikey=${key}&q=${query}`;
+    const url = `https://dataservice.accuweather.com/locations/v1/search?apikey=${key}&q=${query}`;
     console.log(url);
     return url;
   } else if (option === "weather") {
-    const url = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${query}?apikey=${key}`;
+    const url = `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${query}?apikey=${key}`;
     console.log(url);
     return url;
   } else {
