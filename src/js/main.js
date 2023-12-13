@@ -1,7 +1,8 @@
 import { domSelectors } from "../js/dom.js";
 
 const dom = domSelectors();
-const key = `D4b4dAzj6RLOGGm46BucLTLpzz2Z9Kzi`;
+const key = import.meta.env.VITE_KEY_ONE;
+console.log(key)
 
 dom.searchInput.value = null;
 
