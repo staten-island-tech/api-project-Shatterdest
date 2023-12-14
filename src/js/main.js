@@ -56,7 +56,7 @@ async function displayData(location) {
     `;
   dom.lContainer.appendChild(card);
   card.appendChild(forecastContainer);
-  for (let i = 0; i <= forecasts.length; i++) {
+  for (let i = 0; i < forecasts.length; i++) {
     console.log(forecasts);
     const forecastCard = document.createElement("div");
     forecastCard.classList.add("forecast");

@@ -27,6 +27,22 @@ input {
   font-size: 5rem;
 }
 
+summary {
+  background-color: #2196F3;
+  color: white;
+  padding: 10px;
+  list-style-type: '⬇ ';
+}
+
+summary::marker {
+  font-size: 2.5rem;
+}
+
+details[open] > summary {
+  list-style-type: '⬆ ';
+}
+
+
 .region-name {
   font-size: 3rem;
   text-align: center;
