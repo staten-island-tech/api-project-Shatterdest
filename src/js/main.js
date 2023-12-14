@@ -1,7 +1,7 @@
 import { domSelectors } from "../js/dom.js";
 
 const dom = domSelectors();
-const key = "";
+const key = "D4b4dAzj6RLOGGm46BucLTLpzz2Z9Kzi";
 console.log(key);
 
 dom.searchInput.value = null;
