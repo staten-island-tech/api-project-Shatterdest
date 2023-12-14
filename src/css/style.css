@@ -16,17 +16,49 @@
 body,
 html,
 * {
-    font-size: 10px;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  font-size: 10px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-label, input {
+label,
+input {
   font-size: 5rem;
 }
 
-#container {
+.region-name {
+  font-size: 3rem;
+  text-align: center;
+}
+
+.region {
+  font-size: 2.3rem;
+  text-align: center;
+}
+
+.country {
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.type {
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.headline {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.location {
+  border: white solid 3px;
+  border-radius: 20px;
+  padding: 5px 5px;
+}
+
+.forecast-container {
   width: 95vw;
   display: flex;
   flex-wrap: wrap;
@@ -34,7 +66,7 @@ label, input {
   margin: 1rem auto;
 }
 
-.location {
+.forecast {
   position: relative;
   height: fit-content;
   display: flex;
@@ -44,8 +76,6 @@ label, input {
   justify-content: space-around;
   margin: 2rem auto;
   flex-basis: auto;
-  border: white  solid 3px;
-  border-radius: 20px;
   margin-right: 2rem;
   overflow: hidden;
 }

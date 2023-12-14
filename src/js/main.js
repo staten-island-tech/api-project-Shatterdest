@@ -1,8 +1,8 @@
 import { domSelectors } from "../js/dom.js";
 
 const dom = domSelectors();
-const key = import.meta.env.VITE_KEY_ONE;
-console.log(key)
+const key = "";
+console.log(key);
 
 dom.searchInput.value = null;
 
@@ -36,53 +36,51 @@ async function getData(URL) {
   }
 }
 
-async function displayData(location){
-  console.log(location)
-    const locationID = location.Key;
-    const lData = await getData(search(key, locationID, "weather"));
-    const card = document.createElement("div");
-    const forecastContainer = document.createElement('div')
-    const forecasts = lData.DailyForecasts
-    console.log("ID: " + locationID);
-    console.log(lData);
-    card.classList.add("location");
-    forecastContainer.classList.add('forecast-container')
-    forecastContainer.id = `${locationID}`
-    card.innerHTML = `<h3 class='region-name'>${location.EnglishName}</h3>
-    <h4>${location.Region.EnglishName}</h4>
-    <h4>${location.Country.EnglishName}</h4>
-    <p>${location.Type}</p>
-    <h2>${lData.Headline.Text}</h2>
+async function displayData(location) {
+  console.log(location);
+  const locationID = location.Key;
+  const lData = await getData(search(key, locationID, "weather"));
+  const card = document.createElement("details");
+  const forecastContainer = document.createElement("div");
+  const forecasts = lData.DailyForecasts;
+  console.log("ID: " + locationID);
+  console.log(lData);
+  card.classList.add("location");
+  forecastContainer.classList.add("forecast-container");
+  forecastContainer.id = `${locationID}`;
+  card.innerHTML = `<summary><h3 class='region-name'>${location.EnglishName}</h3>
+    <h4 class='region'>${location.Region.EnglishName}</h4>
+    <h4 class='country'>${location.Country.EnglishName}</h4>
+    <p class='type'>${location.Type}</p>
+    <h2 class='headline'>${lData.Headline.Text}</h2></summary>
     `;
-    dom.lContainer.appendChild(card);
-    card.appendChild(forecastContainer);
-    for (let i = 0; i <= forecasts.length; i++) {
-      console.log(forecasts)
-      const forecastCard = document.createElement('div')
-      forecastCard.classList.add('forecast')
-      forecastCard.innerHTML = `<h4>${forecasts[i].Date}</h4>
-      <h3>Minimum: ${forecasts[i].Temperature.Minimum.Value} °F</h3>
-      <h3>Maximum: ${forecasts[i].Temperature.Maximum.Value} °F</h3>
-      <h2>Day: ${forecasts[i].Day.IconPhrase}</h2><img src="${forecasts[i].Day.Icon}.png" alt="">
-      <h2>Night: ${forecasts[i].Night.IconPhrase}</h2><img src="${forecasts[i].Night.Icon}.png" alt="">
-      ` 
-      console.log(forecastCard)
-      forecastContainer.appendChild(forecastCard)
-    }
+  dom.lContainer.appendChild(card);
+  card.appendChild(forecastContainer);
+  for (let i = 0; i <= forecasts.length; i++) {
+    console.log(forecasts);
+    const forecastCard = document.createElement("div");
+    forecastCard.classList.add("forecast");
+    forecastCard.innerHTML = `<h4>${forecasts[i].Date}</h4>
+      <h3 class='min-temp'>Minimum: ${forecasts[i].Temperature.Minimum.Value} °F</h3>
+      <h3 class='max-temp'>Maximum: ${forecasts[i].Temperature.Maximum.Value} °F</h3>
+      <h2 class='day-text'>Day: ${forecasts[i].Day.IconPhrase}</h2><img src="${forecasts[i].Day.Icon}.png" alt="">
+      <h2 class='night-text'>Night: ${forecasts[i].Night.IconPhrase}</h2><img src="${forecasts[i].Night.Icon}.png" alt="">
+      `;
+    console.log(forecastCard);
+    forecastContainer.appendChild(forecastCard);
+  }
 }
 
 dom.search.addEventListener("submit", async (e) => {
   e.preventDefault();
-  dom.lContainer.innerHTML = ''
+  dom.lContainer.innerHTML = "";
   const submitted = dom.searchInput.value;
   console.log(`value submitted: ${submitted}`);
   const locations = await getData(search(key, submitted, "search"));
   console.log(locations);
 
   for (let i = 0; i <= locations.length; i++) {
-    const location = await locations[i]
-    displayData(location)
+    const location = await locations[i];
+    displayData(location);
   }
 });
-
-
