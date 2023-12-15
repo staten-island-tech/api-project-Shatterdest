@@ -60,11 +60,11 @@ async function displayData(location) {
     console.log(forecasts);
     const forecastCard = document.createElement("div");
     forecastCard.classList.add("forecast");
-    forecastCard.innerHTML = `<h4>${forecasts[i].Date}</h4>
-      <h3 class='min-temp'>Minimum: ${forecasts[i].Temperature.Minimum.Value} °F</h3>
-      <h3 class='max-temp'>Maximum: ${forecasts[i].Temperature.Maximum.Value} °F</h3>
-      <h2 class='day-text'>Day: ${forecasts[i].Day.IconPhrase}</h2><img src="${forecasts[i].Day.Icon}.png" alt="">
-      <h2 class='night-text'>Night: ${forecasts[i].Night.IconPhrase}</h2><img src="${forecasts[i].Night.Icon}.png" alt="">
+    forecastCard.innerHTML = `<h4 class='time'>${forecasts[i].Date}</h4>
+      <h3 class='min-temp temp'>Minimum: ${forecasts[i].Temperature.Minimum.Value} °F</h3>
+      <h3 class='max-temp temp'>Maximum: ${forecasts[i].Temperature.Maximum.Value} °F</h3>
+      <h2 class='day-text forecast-text'>Day: ${forecasts[i].Day.IconPhrase}</h2><img src="${forecasts[i].Day.Icon}.png" alt="">
+      <h2 class='night-text forecast-text'>Night: ${forecasts[i].Night.IconPhrase}</h2><img src="${forecasts[i].Night.Icon}.png" alt="">
       `;
     console.log(forecastCard);
     forecastContainer.appendChild(forecastCard);
@@ -84,3 +84,5 @@ dom.search.addEventListener("submit", async (e) => {
     displayData(location);
   }
 });
+
+// https://codepen.io/jgustavoas/pen/rNQyxWa?editors=1100
