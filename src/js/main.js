@@ -2,6 +2,17 @@ import { domSelectors } from "../js/dom.js";
 
 const dom = domSelectors();
 const key = "D4b4dAzj6RLOGGm46BucLTLpzz2Z9Kzi";
+const successCallback = (position) => {
+  console.log(position);
+};
+const errorCallback = (error) => {
+  console.log(error);
+};
+const options = {
+  enableHighAccuracy: false
+};
+
+navigator.geolocation.getCurrentPosition(successCallback, errorCallback, options);
 console.log(key);
 
 dom.searchInput.value = null;
@@ -52,7 +63,8 @@ async function displayData(location) {
     <h4 class='region'>${location.Region.EnglishName}</h4>
     <h4 class='country'>${location.Country.EnglishName}</h4>
     <p class='type'>${location.Type}</p>
-    <h2 class='headline'>${lData.Headline.Text}</h2></summary>
+    <h2 class='headline'>${lData.Headline.Text}</h2>    <p>Press to see more!</p></summary>
+
     `;
   dom.lContainer.appendChild(card);
   card.appendChild(forecastContainer);
