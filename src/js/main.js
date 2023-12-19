@@ -17,7 +17,7 @@ function search(key, query, option) {
     console.log(url);
     return url;
   } else if (option === 'coords'){
-    const url = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${key}&q=${query.lat}%2C${query.long}`
+    const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${key}&q=${query.lat}%2C${query.long}`
     console.log(url)
     return url;
   } else {
