@@ -16,9 +16,13 @@ function search(key, query, option) {
     const url = `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${query}?apikey=${key}`;
     console.log(url);
     return url;
-  } else if (option === 'coords'){
-    const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${key}&q=${query.lat}%2C${query.long}`
-    console.log(url)
+  } else if (option === "coords") {
+    const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${key}&q=${query.lat}%2C${query.long}`;
+    console.log(url);
+    return url;
+  } else if (option === "postal") {
+    const url = `http://dataservice.accuweather.com/locations/v1/postalcodes/search?apikey=${key}&q=${query}`;
+    console.log(url);
     return url;
   } else {
     console.log("how");
@@ -44,6 +48,7 @@ async function getData(URL) {
 async function displayData(location) {
   console.log(location);
   const locationID = location.Key;
+  console.log(`location key: ${locationID}`)
   const lData = await getData(search(key, locationID, "weather"));
   const card = document.createElement("details");
   const forecastContainer = document.createElement("div");
@@ -91,16 +96,34 @@ dom.search.addEventListener("submit", async (e) => {
   }
 });
 
+dom.postal.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  dom.lContainer.innerHTML = "";
+  const submitted = dom.postalInput.value;
+  const locations = await getData(search(key, submitted, "postal"));
+  console.log(locations);
+  for (let i = 0; i <= locations.length; i++) {
+    const location = await locations[i];
+    displayData(location);
+  }
+});
+
 dom.currentLoc.addEventListener("click", async (e) => {
   e.preventDefault();
   const response = [];
   const successCallback = async (position) => {
     console.log(position);
-    const data = await getData(search(key, {lat: position.coords.latitude, long: position.coords.longitude}, 'coords'))
-    displayData(data)
+    const data = await getData(
+      search(
+        key,
+        { lat: position.coords.latitude, long: position.coords.longitude },
+        "coords"
+      )
+    );
+    displayData(data);
   };
   const errorCallback = (error) => {
-    throw new Error(error)
+    throw new Error(error);
   };
   const options = {
     enableHighAccuracy: true,
@@ -115,6 +138,5 @@ dom.currentLoc.addEventListener("click", async (e) => {
   } catch (error) {
     console.log(error);
   }
-  
 });
 // https://codepen.io/jgustavoas/pen/rNQyxWa?editors=1100
