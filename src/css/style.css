@@ -104,3 +104,8 @@ details > summary::-webkit-details-marker {
 .temp {
   font-size: 2.5rem;
 }
+
+.see-more {
+  text-align: center;
+  font-size: 2rem;
+}
