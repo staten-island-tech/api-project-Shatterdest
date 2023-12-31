@@ -6,4 +6,5 @@ export const dom = {
   lContainer: document.getElementById("location-container"),
   locations: document.querySelectorAll("#location"),
   currentLoc: document.getElementById("current-loc"),
+  error: document.getElementById('error')
 };

@@ -1,49 +1,12 @@
 import { dom } from "../js/dom.js";
 import { imgs } from "../js/imgs.js";
-import { currentLocation } from "./currentLocation.js";
+import { getPosition } from "./currentLocation.js";
+import { getData, search } from "./getData.js";
 
 const key = "UAOf0aGozU6aI1pJ2XZurfUqqee85egV";
 
 dom.searchInput.value = null;
 dom.postalInput.value = null;
-
-function search(key, query, option) {
-  if (option === "search") {
-    const url = `https://dataservice.accuweather.com/locations/v1/search?apikey=${key}&q=${query}`;
-    console.log(url);
-    return url;
-  } else if (option === "weather") {
-    const url = `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${query}?apikey=${key}`;
-    console.log(url);
-    return url;
-  } else if (option === "coords") {
-    const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${key}&q=${query.lat}%2C${query.long}`;
-    console.log(url);
-    return url;
-  } else if (option === "postal") {
-    const url = `http://dataservice.accuweather.com/locations/v1/postalcodes/search?apikey=${key}&q=${query}`;
-    console.log(url);
-    return url;
-  } else {
-    console.log("how");
-  }
-}
-
-async function getData(URL) {
-  try {
-    const response = await fetch(URL);
-    console.log(response);
-    if (response.status >= 200 || response.status <= 299) {
-      const data = await response.json();
-      console.log(data);
-      return data;
-    } else {
-      throw new Error(response);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 async function displayData(location) {
   console.log(location);
@@ -93,17 +56,34 @@ async function displayData(location) {
   }
 }
 
+function checkBlank(input) {
+  if (input.length === 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 dom.search.addEventListener("submit", async (e) => {
   e.preventDefault();
   dom.lContainer.innerHTML = "";
+  dom.error.innerHTML = "";
   const submitted = dom.searchInput.value;
-  console.log(`value submitted: ${submitted}`);
-  const locations = await getData(search(key, submitted, "search"));
-  console.log(locations);
+  if (checkBlank(submitted)) {
+    console.log(`value submitted: ${submitted}`);
+    const locations = await getData(search(key, submitted, "search"));
+    if (checkBlank(locations)) {
+      console.log(locations);
 
-  for (let i = 0; i <= locations.length; i++) {
-    const location = await locations[i];
-    displayData(location);
+      for (let i = 0; i <= locations.length; i++) {
+        const location = await locations[i];
+        displayData(location);
+      }
+    } else {
+      dom.error.innerHTML = `Please submit a valid location!`;
+    }
+  } else {
+    dom.error.innerHTML = `Please submit a valid location!`;
   }
 });
 
@@ -111,15 +91,32 @@ dom.postal.addEventListener("submit", async (e) => {
   e.preventDefault();
   dom.lContainer.innerHTML = "";
   const submitted = dom.postalInput.value;
-  const locations = await getData(search(key, submitted, "postal"));
-  console.log(locations);
-  for (let i = 0; i <= locations.length; i++) {
-    const location = await locations[i];
-    displayData(location);
+  if (checkBlank(submitted)) {
+    const locations = await getData(search(key, submitted, "postal"));
+    console.log(locations);
+    for (let i = 0; i <= locations.length; i++) {
+      const location = await locations[i];
+      displayData(location);
+    }
+  } else {
+    dom.error.innerHTML = `Please submit a valid location!`;
   }
 });
 
-dom.currentLoc.addEventListener("click", (e) => {
+dom.currentLoc.addEventListener("click", async (e) => {
   e.preventDefault();
-  currentLocation();
+  dom.lContainer.innerHTML = "";
+  const position = await getPosition({
+    enableHighAccuracy: true,
+  });
+  console.log(position);
+  const data = await getData(
+    search(
+      key,
+      { lat: position.coords.latitude, long: position.coords.longitude },
+      "coords"
+    )
+  );
+  console.log(data);
+  displayData(data);
 });
