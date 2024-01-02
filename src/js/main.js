@@ -25,8 +25,9 @@ async function displayData(location) {
     <h4 class='region'>${location.Region.EnglishName}</h4>
     <h4 class='country'>${location.Country.EnglishName}</h4>
     <p class='type'>${location.Type}</p>
-    <h2 class='headline'>${lData.Headline.Text}</h2>    <p class='see-more'>Press to see more!</p></summary>
-
+    <h2 class='headline'>${lData.Headline.Text}</h2>
+    <p class='see-more'>Press to see more!</p>
+    </summary>
     `;
   dom.lContainer.appendChild(card);
   card.appendChild(forecastContainer);
@@ -56,55 +57,7 @@ async function displayData(location) {
   }
 }
 
-function checkBlank(input) {
-  if (input.length === 0) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-dom.search.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  dom.lContainer.innerHTML = "";
-  dom.error.innerHTML = "";
-  const submitted = dom.searchInput.value;
-  if (checkBlank(submitted)) {
-    console.log(`value submitted: ${submitted}`);
-    const locations = await getData(search(key, submitted, "search"));
-    if (checkBlank(locations)) {
-      console.log(locations);
-
-      for (let i = 0; i <= locations.length; i++) {
-        const location = await locations[i];
-        displayData(location);
-      }
-    } else {
-      dom.error.innerHTML = `Please submit a valid location!`;
-    }
-  } else {
-    dom.error.innerHTML = `Please submit a valid location!`;
-  }
-});
-
-dom.postal.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  dom.lContainer.innerHTML = "";
-  const submitted = dom.postalInput.value;
-  if (checkBlank(submitted)) {
-    const locations = await getData(search(key, submitted, "postal"));
-    console.log(locations);
-    for (let i = 0; i <= locations.length; i++) {
-      const location = await locations[i];
-      displayData(location);
-    }
-  } else {
-    dom.error.innerHTML = `Please submit a valid location!`;
-  }
-});
-
-dom.currentLoc.addEventListener("click", async (e) => {
-  e.preventDefault();
+async function displayCurrentLocation() {
   dom.lContainer.innerHTML = "";
   const position = await getPosition({
     enableHighAccuracy: true,
@@ -119,4 +72,46 @@ dom.currentLoc.addEventListener("click", async (e) => {
   );
   console.log(data);
   displayData(data);
+}
+
+function checkBlank(input) {
+  if (input === null || input.length === 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+async function inputHandler(type) {
+  dom.lContainer.innerHTML = "";
+  dom.error.innerHTML = "";
+  const submitted = type.value;
+  console.log(`value submitted: ${submitted}`);
+  const locations = await getData(search(key, submitted, "search"));
+  if (checkBlank(locations) && checkBlank(submitted)) {
+    console.log(locations);
+    for (let i = 0; i <= locations.length; i++) {
+      const location = await locations[i];
+      displayData(location);
+    }
+  } else {
+    dom.error.innerHTML = `Please submit a valid location!`;
+  }
+}
+
+displayCurrentLocation();
+
+dom.search.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  inputHandler(dom.searchInput);
+});
+
+dom.postal.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  inputHandler(dom.postalInput);
+});
+
+dom.currentLoc.addEventListener("click", async (e) => {
+  e.preventDefault();
+  displayCurrentLocation();
 });
