@@ -38,15 +38,20 @@ footer {
   position: fixed;
   left: 0;
   bottom: 0;
-  width: 100%;
+  width: 100vw;
   background-color: #000000;
   color: white;
   text-align: center;
-  font-size: 2rem;;
+  font-size: 2rem;
 }
 
 h1 {
   font-size: 5rem;
+  text-align: center;
+}
+
+input {
+  width: 85vw;
   text-align: center;
 }
 
