@@ -34,6 +34,21 @@ details > summary::-webkit-details-marker {
   display: none;
 }
 
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #000000;
+  color: white;
+  text-align: center;
+  font-size: 2rem;;
+}
+
+h1 {
+  font-size: 5rem;
+  text-align: center;
+}
 
 .region-name {
   font-size: 3rem;
@@ -107,5 +122,20 @@ details > summary::-webkit-details-marker {
 
 .see-more {
   text-align: center;
+  font-size: 2rem;
+}
+
+.method {
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+#current-loc {
+  font-size: 2rem;
+}
+
+#error {
+  text-align: center;
+  color: rgb(255, 30, 0);
   font-size: 2rem;
 }

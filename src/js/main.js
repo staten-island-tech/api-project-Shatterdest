@@ -8,7 +8,7 @@ const key = "UAOf0aGozU6aI1pJ2XZurfUqqee85egV";
 dom.searchInput.value = null;
 dom.postalInput.value = null;
 
-async function displayData(location) {
+async function displayData(location, method, input) {
   console.log(location);
   const locationID = location.Key;
   console.log(`location key: ${locationID}`);
@@ -21,11 +21,11 @@ async function displayData(location) {
   card.classList.add("location");
   forecastContainer.classList.add("forecast-container");
   forecastContainer.id = `${locationID}`;
-  card.innerHTML = `<summary><h3 class='region-name'>${location.EnglishName}</h3>
-    <h4 class='region'>${location.Region.EnglishName}</h4>
-    <h4 class='country'>${location.Country.EnglishName}</h4>
+  card.innerHTML = `<summary><h2 class='method'>${method} for ${input}</h2><h2 class='region-name'>${location.EnglishName}</h2>
+    <h3 class='region'>${location.Region.EnglishName}</h3>
+    <h3 class='country'>${location.Country.EnglishName}</h3>
     <p class='type'>${location.Type}</p>
-    <h2 class='headline'>${lData.Headline.Text}</h2>
+    <h4 class='headline'>${lData.Headline.Text}</h4>
     <p class='see-more'>Press to see more!</p>
     </summary>
     `;
@@ -35,22 +35,26 @@ async function displayData(location) {
     console.log(forecasts);
     const forecastCard = document.createElement("div");
     forecastCard.classList.add("forecast");
-    forecastCard.innerHTML = `<h4 class='time'>${forecasts[i].Date.slice(
+    forecastCard.innerHTML = `<h3 class='time'>${forecasts[i].Date.slice(
       0,
       -15
-    )}</h4>
-      <h3 class='min-temp temp'>Minimum: ${
+    )}</h3>
+      <h4 class='min-temp temp'>Minimum: ${
         forecasts[i].Temperature.Minimum.Value
-      } °F</h3>
-      <h3 class='max-temp temp'>Maximum: ${
+      } °F</h4>
+      <h4 class='max-temp temp'>Maximum: ${
         forecasts[i].Temperature.Maximum.Value
-      } °F</h3>
-      <h2 class='day-text forecast-text'>Day: ${
+      } °F</h4>
+      <h4 class='day-text forecast-text'>Day: ${
         forecasts[i].Day.IconPhrase
-      }</h2><img src="${imgs[forecasts[i].Day.Icon - 1]}" alt="">
-      <h2 class='night-text forecast-text'>Night: ${
+      }</h4><img src="${imgs[forecasts[i].Day.Icon - 1]}" alt="Icon of ${
+      forecasts[i].Day.IconPhrase
+    } weather.">
+      <h4 class='night-text forecast-text'>Night: ${
         forecasts[i].Night.IconPhrase
-      }</h2><img src="${imgs[forecasts[i].Night.Icon - 1]}" alt="">
+      }</h4><img src="${imgs[forecasts[i].Night.Icon - 1]}" alt="Icon of ${
+      forecasts[i].Night.IconPhrase
+    } weather">
       `;
     console.log(forecastCard);
     forecastContainer.appendChild(forecastCard);
@@ -63,15 +67,13 @@ async function displayCurrentLocation() {
     enableHighAccuracy: true,
   });
   console.log(position);
-  const data = await getData(
-    search(
-      key,
-      { lat: position.coords.latitude, long: position.coords.longitude },
-      "coords"
-    )
-  );
+  const coords = {
+    lat: position.coords.latitude,
+    long: position.coords.longitude,
+  };
+  const data = await getData(search(key, coords, "coords"));
   console.log(data);
-  displayData(data);
+  displayData(data, "Your Current Location", `${coords.lat}, ${coords.long}`);
 }
 
 function checkBlank(input) {
@@ -82,17 +84,18 @@ function checkBlank(input) {
   }
 }
 
-async function inputHandler(type) {
+async function inputHandler(input, method) {
   dom.lContainer.innerHTML = "";
   dom.error.innerHTML = "";
-  const submitted = type.value;
-  console.log(`value submitted: ${submitted}`);
-  const locations = await getData(search(key, submitted, "search"));
-  if (checkBlank(locations) && checkBlank(submitted)) {
+  console.log(`value submitted: ${input}`);
+  const locations = await getData(search(key, input, "search"));
+  if (checkBlank(locations) && checkBlank(input)) {
     console.log(locations);
+    dom.searchInput.value = null;
+    dom.postalInput.value = null;
     for (let i = 0; i <= locations.length; i++) {
       const location = await locations[i];
-      displayData(location);
+      displayData(location, method, input);
     }
   } else {
     dom.error.innerHTML = `Please submit a valid location!`;
@@ -103,12 +106,12 @@ displayCurrentLocation();
 
 dom.search.addEventListener("submit", async (e) => {
   e.preventDefault();
-  inputHandler(dom.searchInput);
+  inputHandler(dom.searchInput.value, "Location Search");
 });
 
 dom.postal.addEventListener("submit", async (e) => {
   e.preventDefault();
-  inputHandler(dom.postalInput);
+  inputHandler(dom.postalInput.value, "Postal Search");
 });
 
 dom.currentLoc.addEventListener("click", async (e) => {
