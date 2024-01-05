@@ -3,7 +3,7 @@ import { imgs } from "../js/imgs.js";
 import { getPosition } from "./currentLocation.js";
 import { getData, search } from "./getData.js";
 
-const key = "UAOf0aGozU6aI1pJ2XZurfUqqee85egV";
+const key = "D4b4dAzj6RLOGGm46BucLTLpzz2Z9Kzi";
 
 dom.searchInput.value = null;
 dom.postalInput.value = null;

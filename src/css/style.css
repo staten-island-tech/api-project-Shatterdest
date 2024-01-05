@@ -159,9 +159,3 @@ input {
   color: rgb(255, 30, 0);
   font-size: 2rem;
 }
-
-@media screen and (max-width: 1500px) {
-  body {
-    font-size: 4px;
-  }
-}
