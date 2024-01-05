@@ -22,15 +22,30 @@ html,
   padding: 0;
 }
 
+@media screen and (max-width: 1000px) {
+  body,
+  html,
+  * {
+    font-size: 7.5px;
+  }
+}
+@media screen and (max-width: 750px) {
+  body,
+  html,
+  * {
+    font-size: 5px;
+  }
+}
 label,
 input {
   font-size: 5rem;
 }
 
-details > summary {
+details>summary {
   list-style: none;
 }
-details > summary::-webkit-details-marker {
+
+details>summary::-webkit-details-marker {
   display: none;
 }
 
@@ -39,7 +54,7 @@ footer {
   left: 0;
   bottom: 0;
   width: 100vw;
-  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.534);
   color: white;
   text-align: center;
   font-size: 2rem;
@@ -143,4 +158,10 @@ input {
   text-align: center;
   color: rgb(255, 30, 0);
   font-size: 2rem;
+}
+
+@media screen and (max-width: 1500px) {
+  body {
+    font-size: 4px;
+  }
 }
