@@ -9,15 +9,11 @@ dom.searchInput.value = null;
 dom.postalInput.value = null;
 
 async function displayData(location, method, input) {
-  console.log(location);
   const locationID = location.Key;
-  console.log(`location key: ${locationID}`);
   const lData = await getData(search(key, locationID, "weather"));
   const card = document.createElement("details");
   const forecastContainer = document.createElement("div");
   const forecasts = lData.DailyForecasts;
-  console.log("ID: " + locationID);
-  console.log(lData);
   card.classList.add("location");
   forecastContainer.classList.add("forecast-container");
   forecastContainer.id = `${locationID}`;
@@ -32,7 +28,6 @@ async function displayData(location, method, input) {
   dom.lContainer.appendChild(card);
   card.appendChild(forecastContainer);
   for (let i = 0; i < forecasts.length; i++) {
-    console.log(forecasts);
     const forecastCard = document.createElement("div");
     forecastCard.classList.add("forecast");
     forecastCard.innerHTML = `<h3 class='time'>${forecasts[i].Date.slice(
@@ -56,7 +51,6 @@ async function displayData(location, method, input) {
       forecasts[i].Night.IconPhrase
     } weather">
       `;
-    console.log(forecastCard);
     forecastContainer.appendChild(forecastCard);
   }
 }
@@ -66,13 +60,11 @@ async function displayCurrentLocation() {
   const position = await getPosition({
     enableHighAccuracy: true,
   });
-  console.log(position);
   const coords = {
     lat: position.coords.latitude,
     long: position.coords.longitude,
   };
   const data = await getData(search(key, coords, "coords"));
-  console.log(data);
   displayData(data, "Your Current Location", `${coords.lat}, ${coords.long}`);
 }
 
@@ -87,7 +79,6 @@ function checkBlank(input) {
 async function inputHandler(input, method) {
   dom.lContainer.innerHTML = "";
   dom.error.innerHTML = "";
-  console.log(`value submitted: ${input}`);
   const locations = await getData(search(key, input, "search"));
   if (checkBlank(locations) && checkBlank(input)) {
     console.log(locations);
